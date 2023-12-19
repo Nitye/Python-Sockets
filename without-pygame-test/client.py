@@ -1,4 +1,5 @@
 import socket
+import pickle
 
 class Client:
   def __init__(self):
@@ -10,6 +11,8 @@ class Client:
     self.disc_msg = 'Disconnect'
     self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     self.client.connect(self.addr)
+    self.player = pickle.loads(self.client.recv(2048))
+    print(self.player.name, self.player.bank)
 
   def send(self, msg):
     message = msg.encode(self.format)
@@ -20,7 +23,6 @@ class Client:
     self.client.send(message)
 
 c = Client()
-c.send('Hello')
-c.send('testing')
-c.send('blah')
-c.send(c.disc_msg)
+while True:
+  msg = input('Enter message: ')
+  c.send(msg)
